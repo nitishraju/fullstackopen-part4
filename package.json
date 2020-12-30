@@ -1,0 +1,19 @@
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "description": "Backend for the blog app in part 4 of the Fullstack Open course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nitishraju/fullstackopen-part4.git"
+  },
+  "author": "Nitish Raju",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nitishraju/fullstackopen-part4/issues"
+  },
+  "homepage": "https://github.com/nitishraju/fullstackopen-part4#readme"
+}
