@@ -8,11 +8,11 @@ blogsRouter.get('/', (request, response) => {
       response.json(blogs)
     })
 })
-  
+
 blogsRouter.post('/', (request, response, next) => {
   const emptyValExists = [
     request.body.title,
-    request.body.author, 
+    request.body.author,
     request.body.url
   ].some(value => value === undefined)
 
@@ -22,7 +22,7 @@ blogsRouter.post('/', (request, response, next) => {
     })
   }
   const blog = new Blog(request.body)
-  
+
   blog
     .save()
     .then(result => {
@@ -31,4 +31,4 @@ blogsRouter.post('/', (request, response, next) => {
     .catch(error => next(error))
 })
 
-module.exports = blogsRouter 
+module.exports = blogsRouter
