@@ -1,8 +1,15 @@
 const totalLikes = require('../utils/total_likes')
 
 describe('total likes', () => {
+  test('of an empty list of blogs is zero', () => {
+    const emptyBlogList = []
+
+    const result = totalLikes.getTotalLikes(emptyBlogList)
+    expect(result).toBe(0)
+  })
+
   test('of a list with one blog is that blog\'s likes', () => {
-    const blogs = [
+    const listWithOneBlog = [
       {
         _id: '5a422a851b54a676234d17f7',
         title: 'React patterns',
@@ -12,17 +19,13 @@ describe('total likes', () => {
         __v: 0
       }
     ]
-    expect(totalLikes.getTotalLikes(blogs)).toBe(7)
-  })
 
-  test('of an empty list of blogs is zero', () => {
-    const blogs = []
-
-    expect(totalLikes.getTotalLikes(blogs)).toBe(0)
+    const result = totalLikes.getTotalLikes(listWithOneBlog)
+    expect(result).toBe(7)
   })
 
   test('of a list with multiple blogs is calculated correctly', () => {
-    const blogs = [
+    const listWithManyBlogs = [
       {
         _id: '5a422a851b54a676234d17f7',
         title: 'React patterns',
@@ -45,6 +48,7 @@ describe('total likes', () => {
       { _id: '5a422bc61b54a676234d17fc', title: 'Type wars', author: 'Robert C. Martin', url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html', likes: 2, __v: 0 }
     ]
 
-    expect(totalLikes.getTotalLikes(blogs)).toBe(36)
+    const result = totalLikes.getTotalLikes(listWithManyBlogs)
+    expect(result).toBe(36)
   })
 })
