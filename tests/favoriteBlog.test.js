@@ -1,14 +1,15 @@
-const totalLikes = require('../utils/dummies/total_likes')
+const favoriteBlog = require('../utils/dummies/favorite_blog')
 
-describe('total likes', () => {
-  test('of an empty list of blogs is zero', () => {
+describe('favorite blog', () => {
+  test('of an empty list is an empty list', () => {
     const emptyBlogList = []
+    const expected = []
 
-    const result = totalLikes.getTotalLikes(emptyBlogList)
-    expect(result).toBe(0)
+    const result = favoriteBlog.getFavoriteBlog(emptyBlogList)
+    expect(result).toEqual(expected)
   })
 
-  test('of a list with one blog is that blog\'s likes', () => {
+  test('of a list with one blog is that blog', () => {
     const listWithOneBlog = [
       {
         _id: '5a422a851b54a676234d17f7',
@@ -19,12 +20,17 @@ describe('total likes', () => {
         __v: 0
       }
     ]
+    const expected = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      likes: 7
+    }
 
-    const result = totalLikes.getTotalLikes(listWithOneBlog)
-    expect(result).toBe(7)
+    const result = favoriteBlog.getFavoriteBlog(listWithOneBlog)
+    expect(result).toEqual(expected)
   })
 
-  test('of a list with multiple blogs is calculated correctly', () => {
+  test('of a list with many blogs is found correctly', () => {
     const listWithManyBlogs = [
       {
         _id: '5a422a851b54a676234d17f7',
@@ -47,8 +53,13 @@ describe('total likes', () => {
       { _id: '5a422ba71b54a676234d17fb', title: 'TDD harms architecture', author: 'Robert C. Martin', url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html', likes: 0, __v: 0 },
       { _id: '5a422bc61b54a676234d17fc', title: 'Type wars', author: 'Robert C. Martin', url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html', likes: 2, __v: 0 }
     ]
+    const expected = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      likes: 12
+    }
 
-    const result = totalLikes.getTotalLikes(listWithManyBlogs)
-    expect(result).toBe(36)
+    const result = favoriteBlog.getFavoriteBlog(listWithManyBlogs)
+    expect(result).toEqual(expected)
   })
 })
