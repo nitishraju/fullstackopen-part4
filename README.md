@@ -8,6 +8,6 @@ The course covers development, testing, configuration and environment management
 
 ## In this repo:
 
-Part 4 of the course covers testing and user authentication/authorization.
+Part 4 of the course covers testing using Jest and user authentication/authorization.
 
 This code contains a Node.js app that integrates these techniques.
