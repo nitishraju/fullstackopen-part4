@@ -108,11 +108,12 @@ test('a blog that is deleted is not found in the database', async () => {
     likes: 0
   }
 
-  const deleteResponse = await api
+  const postResponse = await api
     .post('/api/blogs')
     .send(blogToDelete)
+    .expect(201)
 
-  const idToDelete = deleteResponse.body.id
+  const idToDelete = postResponse.body.id
   await api
     .delete(`/api/blogs/${idToDelete}`)
     .expect(204)
@@ -120,6 +121,36 @@ test('a blog that is deleted is not found in the database', async () => {
   const response = await api.get('/api/blogs')
   const blogList = response.body.map(blogObject => blogObject.title)
   expect(blogList).not.toContain('Blog that is going to be deleted')
+})
+
+test('a blog that is updated contains the new data', async () => {
+  const blogToUpdate = {
+    title: 'Blog that is going to be updated',
+    author: 'To Be Updated',
+    url: 'http://toBeUpdated.com/',
+    likes: 0
+  }
+
+  const postResponse = await api
+    .post('/api/blogs')
+    .send(blogToUpdate)
+    .expect(201)
+
+  const idToUpdate = postResponse.body.id
+  const updatedBlog = {
+    title: 'Blog that has been updated',
+    author: 'Updated Blog',
+    url: 'http://updatedBlog.com/',
+    likes: 25
+  }
+
+  const putResponse = await api
+    .put(`/api/blogs/${idToUpdate}`)
+    .send(updatedBlog)
+    .expect(200)
+
+  const finalBlog = putResponse.body
+  expect(finalBlog.likes).toBe(25)
 })
 
 afterAll(() => {

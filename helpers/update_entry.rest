@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/5fee7afe50f80f1f62f35d08
+Content-Type: application/json
+
+{
+  "title": "Placeholder Blog 2",
+  "author": "Placeholder Author 2",
+  "url": "https://placeholderblog2.com/",
+  "likes": 20
+}

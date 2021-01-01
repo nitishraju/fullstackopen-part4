@@ -8,12 +8,8 @@ blogsRouter.get('/',  async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   let blogToCreate = request.body
-  const emptyValExists = [
-    blogToCreate.title,
-    blogToCreate.url
-  ].some(value => value === undefined)
 
-  if (emptyValExists) {
+  if (blogToCreate.title === undefined || blogToCreate.url === undefined) {
     return response.status(400).json({
       error: 'title or url has not been provided'
     })
@@ -31,6 +27,27 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+  const reqBody = request.body
+  const updatedBlog = {
+    title: reqBody.title,
+    author: reqBody.author,
+    url: reqBody.url,
+    likes: reqBody.likes
+  }
+
+  const updateOpts = { new: true, runValidators: true, context: 'query' }
+  const putResponse =
+    await Blog.findByIdAndUpdate(request.params.id, updatedBlog, updateOpts)
+
+  if (putResponse) {
+    response.json(putResponse)
+  }
+  else {
+    response.status(404).end()
+  }
 })
 
 module.exports = blogsRouter
