@@ -10,18 +10,22 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', (request, response, next) => {
+  let blogToCreate = request.body
   const emptyValExists = [
-    request.body.title,
-    request.body.author,
-    request.body.url
+    blogToCreate.title,
+    blogToCreate.url
   ].some(value => value === undefined)
 
   if (emptyValExists) {
     return response.status(400).json({
-      error: 'title, author, or url has not been provided'
+      error: 'title or url has not been provided'
     })
   }
-  const blog = new Blog(request.body)
+
+  if (blogToCreate.likes === undefined) {
+    blogToCreate.likes = 0
+  }
+  const blog = new Blog(blogToCreate)
 
   blog
     .save()

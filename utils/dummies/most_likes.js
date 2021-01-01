@@ -5,9 +5,7 @@ const getMostLikes = (blogs) => {
     return []
   }
 
-  const groupedByAuthor = _.groupBy(blogs, (blog) => {
-    return blog.author
-  })
+  const groupedByAuthor = _.groupBy(blogs, (blog) => blog.author)
 
   const likesCounter = (postsArray) => {
     let likeCount = 0

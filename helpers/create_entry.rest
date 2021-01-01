@@ -4,6 +4,5 @@ Content-Type: application/json
 {
   "title": "Placeholder Blog 2",
   "author": "Placeholder Author 2",
-  "url": "https://placeholderblog2.com/",
-  "likes": 1
+  "url": "https://placeholderblog2.com/"
 }
