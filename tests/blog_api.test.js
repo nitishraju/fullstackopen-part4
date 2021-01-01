@@ -1,25 +1,22 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+
 const api = supertest(app)
 
 const Blog = require('../models/blog')
 const initialBlogs = [
   {
-    _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
-    likes: 7,
-    __v: 0
+    likes: 7
   },
   {
-    _id: '5a422aa71b54a676234d17f8',
     title: 'Go To Statement Considered Harmful',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0
+    likes: 5
   }
 ]
 beforeEach(async () => {
@@ -101,6 +98,28 @@ test('blogs without a title or url value will be rejected', async () => {
     .post('/api/blogs')
     .send(testBlogWithoutUrl)
     .expect(400)
+})
+
+test('a blog that is deleted is not found in the database', async () => {
+  const blogToDelete = {
+    title: 'Blog that is going to be deleted',
+    author: 'To Be Deleted',
+    url: 'http://toBeDeleted.com/',
+    likes: 0
+  }
+
+  const deleteResponse = await api
+    .post('/api/blogs')
+    .send(blogToDelete)
+
+  const idToDelete = deleteResponse.body.id
+  await api
+    .delete(`/api/blogs/${idToDelete}`)
+    .expect(204)
+
+  const response = await api.get('/api/blogs')
+  const blogList = response.body.map(blogObject => blogObject.title)
+  expect(blogList).not.toContain('Blog that is going to be deleted')
 })
 
 afterAll(() => {
