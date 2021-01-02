@@ -1,12 +1,12 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5yYWp1IiwiaWQiOiI1ZmYwZGZlZjM2MDMxMTI5Mzc2MzBhMGEiLCJpYXQiOjE2MDk2MjE0OTl9.RrqzQgdVG9Sm74L2a9TkiOWiDyZ_UH6Rtqnus_nDSSc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5yYWp1IiwiaWQiOiI1ZmYwZGZlZjM2MDMxMTI5Mzc2MzBhMGEiLCJpYXQiOjE2MDk2MjIxMzB9.TjA32p-KiQ5F6u1kdh68MlAoicbVz6gSSRFCaAWxLdg
 
 {
-  "title": "Go To Statement Considered Harmful",
-  "author": "Edsger W. Dijkstra",
-  "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-  "likes": 5
+  "title": "React patterns",
+  "author": "Michael Chan",
+  "url": "https://reactpatterns.com/",
+  "likes": 7
 }
 
 ###

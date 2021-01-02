@@ -5,6 +5,16 @@ morgan.token('post-data', (request) => {
   return JSON.stringify(request.body)
 })
 
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+  const token = authorization && authorization.toLowerCase().startsWith('bearer ')
+    ? authorization.substring(7)
+    : null
+
+  request.token = token
+  next()
+}
+
 const unknownEndpoint = (request, response) => {
   logger.info(request)
   response.status(404).send({ error: 'unknown endpoint' })
@@ -26,4 +36,4 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-module.exports = { morgan, unknownEndpoint, errorHandler }
+module.exports = { morgan, tokenExtractor, unknownEndpoint, errorHandler }

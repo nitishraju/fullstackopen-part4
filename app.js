@@ -29,6 +29,7 @@ app.use(express.json())
 app.use(middleware.morgan(':method :url :status :res[content-length] - :response-time ms - Body: :post-data', {
   skip: (request) => request.method !== 'POST' && request.method !== 'PUT'
 }))
+app.use(middleware.tokenExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
