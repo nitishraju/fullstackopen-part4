@@ -1,8 +1,8 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "title": "Placeholder Blog 2",
-  "author": "Placeholder Author 2",
-  "url": "https://placeholderblog2.com/"
+  "username": "nraju",
+  "name": "Nitish Raju",
+  "password": "badpassword1"
 }
