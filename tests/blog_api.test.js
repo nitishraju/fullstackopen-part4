@@ -19,6 +19,7 @@ const initialBlogs = [
     likes: 5
   }
 ]
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
