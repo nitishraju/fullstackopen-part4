@@ -4,6 +4,7 @@ require('express-async-errors')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const loginRouter = require('./controllers/login')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
@@ -29,6 +30,7 @@ app.use(middleware.morgan(':method :url :status :res[content-length] - :response
   skip: (request) => request.method !== 'POST' && request.method !== 'PUT'
 }))
 
+app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
