@@ -10,6 +10,16 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   let userToCreate = request.body
+  if (userToCreate.password === undefined) {
+    return response.status(400).json({
+      error: 'password value was not provided'
+    })
+  } else
+  if (userToCreate.password.length < 3) {
+    return response.status(400).json({
+      error: 'password length must be greater than 3 characters'
+    })
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(userToCreate.password, saltRounds)
