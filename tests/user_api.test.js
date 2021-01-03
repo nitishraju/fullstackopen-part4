@@ -81,6 +81,7 @@ test('post operation with invalid user returns appropriate status/message', asyn
   expect(shortNameResponse.body.error).toContain('User validation failed: username: Path `username`')
 })
 
-afterAll(() => {
+afterAll(async () => {
+  await User.deleteMany({})
   mongoose.connection.close()
 })

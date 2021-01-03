@@ -43,27 +43,27 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const token = request.token
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!decodedToken.id) {
+  const blog = await Blog.findById(request.params.id)
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id || (blog.user.toString() !== decodedToken.id)) {
     return response.status(401).json({
       error: 'invalid token'
     })
   }
 
-  const blog = await Blog.findById(request.params.id)
-  if (blog.user.toString() === decodedToken.id) {
-    await Blog.findByIdAndDelete(blog.id)
-    response.status(204).end()
-  }
-  else {
-    response.status(401).json({
-      error: 'invalid token'
-    })
-  }
+  await Blog.findByIdAndDelete(blog.id)
+  response.status(204).end()
 })
 
 blogsRouter.put('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id || (blog.user.toString() !== decodedToken.id)) {
+    return response.status(401).json({ error: 'invalid token' })
+  }
+
   const reqBody = request.body
   const updatedBlog = {
     title: reqBody.title,
@@ -76,12 +76,9 @@ blogsRouter.put('/:id', async (request, response) => {
   const putResponse =
     await Blog.findByIdAndUpdate(request.params.id, updatedBlog, updateOpts)
 
-  if (putResponse) {
-    response.json(putResponse)
-  }
-  else {
-    response.status(404).end()
-  }
+  putResponse
+    ? response.json(putResponse)
+    : response.status(404).end()
 })
 
 module.exports = blogsRouter

@@ -4,6 +4,7 @@ const app = require('../app')
 
 const api = supertest(app)
 
+const User = require('../models/user')
 const Blog = require('../models/blog')
 const initialBlogs = [
   {
@@ -20,6 +21,26 @@ const initialBlogs = [
   }
 ]
 
+const testUser = {
+  'username': 'testuserBlog',
+  'name': 'Test User',
+  'password': 'Tuser'
+}
+let token = null
+
+beforeAll(async () => {
+  await api
+    .post('/api/users')
+    .send(testUser)
+    .expect(200)
+
+  const response = await api.post('/api/login')
+    .send(testUser)
+    .expect(200)
+
+  token = response.body.token
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -27,6 +48,19 @@ beforeEach(async () => {
   await newBlog.save()
   newBlog = new Blog(initialBlogs[1])
   await newBlog.save()
+})
+
+test('creating a blog fails if the header does not contain a token', async () => {
+  const validTestBlog = {
+    title: 'Type wars',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 2
+  }
+  await api
+    .post('/api/blogs')
+    .send(validTestBlog)
+    .expect(401)
 })
 
 test('blogs are returned in JSON format', async () => {
@@ -53,6 +87,7 @@ test('a valid blog can be added', async () => {
 
   await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(validTestBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -72,6 +107,7 @@ test('blogs without a given likes value will be created with a default of 0', as
 
   const response = await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(testBlogWithoutLikes)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -87,6 +123,7 @@ test('blogs without a title or url value will be rejected', async () => {
   }
   await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(testBlogWithoutTitle)
     .expect(400)
 
@@ -97,6 +134,7 @@ test('blogs without a title or url value will be rejected', async () => {
   }
   await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(testBlogWithoutUrl)
     .expect(400)
 })
@@ -111,12 +149,14 @@ test('a blog that is deleted is not found in the database', async () => {
 
   const postResponse = await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(blogToDelete)
     .expect(201)
 
   const idToDelete = postResponse.body.id
   await api
     .delete(`/api/blogs/${idToDelete}`)
+    .auth(token, { type: 'bearer' })
     .expect(204)
 
   const response = await api.get('/api/blogs')
@@ -134,6 +174,7 @@ test('a blog that is updated contains the new data', async () => {
 
   const postResponse = await api
     .post('/api/blogs')
+    .auth(token, { type: 'bearer' })
     .send(blogToUpdate)
     .expect(201)
 
@@ -147,6 +188,7 @@ test('a blog that is updated contains the new data', async () => {
 
   const putResponse = await api
     .put(`/api/blogs/${idToUpdate}`)
+    .auth(token, { type: 'bearer' })
     .send(updatedBlog)
     .expect(200)
 
@@ -154,6 +196,7 @@ test('a blog that is updated contains the new data', async () => {
   expect(finalBlog.likes).toBe(25)
 })
 
-afterAll(() => {
+afterAll(async () => {
+  await User.deleteMany({})
   mongoose.connection.close()
 })

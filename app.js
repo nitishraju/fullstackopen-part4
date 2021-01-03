@@ -27,7 +27,7 @@ mongoose.connect(config.MONGO_URI, connectionOpts)
 app.use(cors())
 app.use(express.json())
 app.use(middleware.morgan(':method :url :status :res[content-length] - :response-time ms - Body: :post-data', {
-  skip: (request) => ['GET'].includes(request.method)
+  skip: (request) => ['GET'].includes(request.method) || process.env.NODE_ENV === 'test'
 }))
 app.use(middleware.tokenExtractor)
 
